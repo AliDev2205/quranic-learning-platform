@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen, faClock, faChartLine, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import { lessonsAPI, categoriesAPI } from '@/lib/api'
+import { lessonsAPI, categoriesAPI, getMediaUrl } from '@/lib/api'
 import { toast } from 'sonner'
 
 interface Lesson {
@@ -224,7 +224,7 @@ export default function LessonsPage() {
                 <div className="h-48 bg-gradient-to-br from-primary-900 to-night-900 flex items-center justify-center">
                   {lesson.imageUrl ? (
                     <img
-                      src={lesson.imageUrl}
+                      src={getMediaUrl(lesson.imageUrl)}
                       alt={lesson.title}
                       className="w-full h-full object-cover"
                     />

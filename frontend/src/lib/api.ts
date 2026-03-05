@@ -1,6 +1,29 @@
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+export const BASE_URL = API_URL.replace(/\/api$/, '');
+
+/**
+ * Retourne l'URL complète pour un média (image, audio, vidéo)
+ * Gère les URLs absolues, les chemins relatifs et les anciennes URLs localhost
+ */
+export const getMediaUrl = (path: string | null | undefined): string => {
+  if (!path) return '';
+
+  // Si c'est déjà une URL complète (http://... ou https://...)
+  if (path.startsWith('http')) {
+    // Si c'est une vieille URL localhost, on la nettoie
+    if (path.includes('localhost:3001')) {
+      const relativePath = path.replace('http://localhost:3001', '');
+      return `${BASE_URL}${relativePath}`;
+    }
+    return path;
+  }
+
+  // Si c'est un chemin relatif
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${BASE_URL}${cleanPath}`;
+};
 
 // Instance axios avec configuration de base
 export const api = axios.create({

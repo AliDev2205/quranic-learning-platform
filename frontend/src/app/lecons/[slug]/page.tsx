@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import { lessonsAPI, favoritesAPI, progressAPI, commentsAPI, api } from '@/lib/api'
+import { lessonsAPI, favoritesAPI, progressAPI, commentsAPI, api, getMediaUrl } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
 import { toast } from 'sonner'
 import { pluralize, formatCount } from '@/utils/format'
@@ -253,7 +253,7 @@ export default function LessonDetailPage() {
               {lesson.imageUrl && (
                 <div className="mb-8 rounded-xl overflow-hidden">
                   <img
-                    src={lesson.imageUrl}
+                    src={getMediaUrl(lesson.imageUrl)}
                     alt={lesson.title}
                     className="w-full h-auto"
                   />
@@ -275,7 +275,7 @@ export default function LessonDetailPage() {
               {lesson.audioUrl && (
                 <div className="mb-8 p-4 bg-white/10 rounded-xl">
                   <audio controls className="w-full">
-                    <source src={lesson.audioUrl} type="audio/mpeg" />
+                    <source src={getMediaUrl(lesson.audioUrl)} type="audio/mpeg" />
                   </audio>
                 </div>
               )}

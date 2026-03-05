@@ -12,7 +12,7 @@ import {
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useAuthStore } from '@/store/auth'
-import { api, lessonsAPI, commentsAPI } from '@/lib/api'
+import { api, lessonsAPI, commentsAPI, getMediaUrl } from '@/lib/api'
 import { toast } from 'sonner'
 import { pluralize } from '@/utils/format'
 
@@ -135,8 +135,12 @@ export default function ProfilPage() {
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row items-center gap-6">
             {/* Avatar */}
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary-500 to-gold-500 flex items-center justify-center border-4 border-primary-500 shadow-xl shadow-primary-900/40">
-              <FontAwesomeIcon icon={faUser} className="text-5xl text-white" />
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary-500 to-gold-500 flex items-center justify-center border-4 border-primary-500 shadow-xl shadow-primary-900/40 overflow-hidden">
+              {user?.avatar ? (
+                <img src={getMediaUrl(user.avatar)} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <FontAwesomeIcon icon={faUser} className="text-5xl text-white" />
+              )}
             </div>
 
             {/* Informations */}
