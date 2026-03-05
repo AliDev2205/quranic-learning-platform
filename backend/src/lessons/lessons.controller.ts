@@ -21,7 +21,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('lessons')
 export class LessonsController {
-  constructor(private readonly lessonsService: LessonsService) {}
+  constructor(private readonly lessonsService: LessonsService) { }
 
   // Routes publiques
   @Get('published')
@@ -87,7 +87,7 @@ export class LessonsController {
     return {
       filename: file.filename,
       path: `/uploads/lessons/${file.filename}`,
-      url: `http://localhost:3001/uploads/lessons/${file.filename}`,
+      url: `/uploads/lessons/${file.filename}`,
     };
   }
 
@@ -100,7 +100,7 @@ export class LessonsController {
     return {
       filename: file.filename,
       path: `/uploads/lessons/${file.filename}`,
-      url: `http://localhost:3001/uploads/lessons/${file.filename}`,
+      url: `/uploads/lessons/${file.filename}`,
     };
   }
 
@@ -113,7 +113,7 @@ export class LessonsController {
     return {
       filename: file.filename,
       path: `/uploads/lessons/${file.filename}`,
-      url: `http://localhost:3001/uploads/lessons/${file.filename}`,
+      url: `/uploads/lessons/${file.filename}`,
     };
   }
 }

@@ -11,6 +11,27 @@ export class LessonsService {
     private mailService: MailService,
   ) { }
 
+  private prefixUrl(url: string | null): string | null {
+    if (!url) return null;
+    if (url.startsWith('http')) {
+      // Si l'URL contient localhost, on la remplace par l'URL du backend ou on la rend relative
+      if (url.includes('localhost:3001')) {
+        return url.replace('http://localhost:3001', '');
+      }
+      return url;
+    }
+    return url;
+  }
+
+  private transformLesson(lesson: any) {
+    return {
+      ...lesson,
+      imageUrl: this.prefixUrl(lesson.imageUrl),
+      audioUrl: this.prefixUrl(lesson.audioUrl),
+      videoUrl: this.prefixUrl(lesson.videoUrl),
+    };
+  }
+
   // Créer une leçon
   async create(createLessonDto: CreateLessonDto) {
     const slug = this.generateSlug(createLessonDto.title);
@@ -52,7 +73,7 @@ export class LessonsService {
 
   // Récupérer toutes les leçons (pour l'admin)
   async findAll() {
-    return this.prisma.lesson.findMany({
+    const lessons = await this.prisma.lesson.findMany({
       include: {
         category: true,
         exercises: true,
@@ -65,6 +86,7 @@ export class LessonsService {
       },
       orderBy: { order: 'asc' },
     });
+    return lessons.map(l => this.transformLesson(l));
   }
 
   // Récupérer les leçons publiées (pour les apprenants)
@@ -79,7 +101,7 @@ export class LessonsService {
       where.level = level;
     }
 
-    return this.prisma.lesson.findMany({
+    const lessons = await this.prisma.lesson.findMany({
       where,
       include: {
         category: true,
@@ -93,6 +115,7 @@ export class LessonsService {
       },
       orderBy: { order: 'asc' },
     });
+    return lessons.map(l => this.transformLesson(l));
   }
 
   // Récupérer une leçon par son ID
@@ -182,7 +205,7 @@ export class LessonsService {
       slug = this.generateSlug(updateLessonDto.title);
     }
 
-    return this.prisma.lesson.update({
+    const result = await this.prisma.lesson.update({
       where: { id },
       data: {
         ...updateLessonDto,
@@ -192,6 +215,7 @@ export class LessonsService {
         category: true,
       },
     });
+    return this.transformLesson(result);
   }
 
   // Supprimer une leçon
@@ -202,7 +226,7 @@ export class LessonsService {
 
   // Rechercher des leçons
   async search(query: string) {
-    return this.prisma.lesson.findMany({
+    const lessons = await this.prisma.lesson.findMany({
       where: {
         status: 'PUBLISHED',
         OR: [
@@ -216,6 +240,7 @@ export class LessonsService {
       },
       orderBy: { createdAt: 'desc' },
     });
+    return lessons.map(l => this.transformLesson(l));
   }
 
   // Générer un slug à partir du titre
