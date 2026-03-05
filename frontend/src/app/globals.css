@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-white dark:bg-night-900 text-night-900 dark:text-night-50 transition-colors;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+@layer components {
+
+  /* Boutons */
+  .btn-primary {
+    @apply px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-night-100 dark:bg-night-800 hover:bg-night-200 dark:hover:bg-night-700 text-night-900 dark:text-white rounded-lg font-medium transition-colors;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950 rounded-lg font-medium transition-colors;
+  }
+
+  /* Cartes */
+  .card {
+    @apply bg-white dark:bg-night-800 rounded-xl shadow-sm border border-night-200 dark:border-night-700 p-6 transition-all hover:shadow-md;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full px-4 py-3 bg-white dark:bg-night-800 border border-night-300 dark:border-night-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Animations personnalisées */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scroll personnalisé */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-night-100 dark:bg-night-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-500 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-600;
+}

@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  name            String
+  role            UserRole         @default(LEARNER)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  avatar          String?
+  bio             String?
+  birthDate       DateTime?
+  city            String?
+  country         String?
+  phone           String?
+  comments        Comment[]
+  exerciseResults ExerciseResult[]
+  favorites       Favorite[]
+  progress        LessonProgress[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lessons     Lesson[]
+
+  @@map("categories")
+}
+
+model Lesson {
+  id          String           @id @default(uuid())
+  title       String
+  slug        String           @unique
+  content     String
+  description String?
+  level       LessonLevel      @default(BEGINNER)
+  status      Status           @default(DRAFT)
+  order       Int              @default(0)
+  imageUrl    String?
+  audioUrl    String?
+  videoUrl    String?
+  categoryId  String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  comments    Comment[]
+  exercises   Exercise[]
+  favorites   Favorite[]
+  progress    LessonProgress[]
+  category    Category?        @relation(fields: [categoryId], references: [id])
+
+  @@map("lessons")
+}
+
+model Exercise {
+  id          String           @id @default(uuid())
+  title       String
+  description String?
+  type        ExerciseType
+  lessonId    String
+  order       Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  results     ExerciseResult[]
+  lesson      Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions   Question[]
+
+  @@map("exercises")
+}
+
+model Question {
+  id         String   @id @default(uuid())
+  exerciseId String
+  question   String
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  answers    Answer[]
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@map("questions")
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  questionId String
+  text       String
+  isCorrect  Boolean  @default(false)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("answers")
+}
+
+model LessonProgress {
+  id          String         @id @default(uuid())
+  userId      String
+  lessonId    String
+  status      ProgressStatus @default(NOT_STARTED)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  completedAt DateTime?
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+model ExerciseResult {
+  id         String   @id @default(uuid())
+  userId     String
+  exerciseId String
+  score      Int?
+  answers    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("exercise_results")
+}
+
+model Comment {
+  id        String        @id @default(uuid())
+  userId    String
+  lessonId  String
+  content   String
+  status    CommentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  lesson    Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  lessonId  String
+  createdAt DateTime @default(now())
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("favorites")
+}
+
+enum UserRole {
+  ADMIN
+  LEARNER
+}
+
+enum LessonLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+enum ExerciseType {
+  QCM
+  OPEN_QUESTION
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
