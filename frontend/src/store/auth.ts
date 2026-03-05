@@ -5,6 +5,7 @@ interface User {
   email: string;
   name: string;
   role: 'ADMIN' | 'LEARNER';
+  avatar?: string | null;
   createdAt?: string;
 }
 
