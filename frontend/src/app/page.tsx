@@ -16,7 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import { lessonsAPI } from '@/lib/api'
+import { lessonsAPI, getMediaUrl } from '@/lib/api'
 
 interface Lesson {
   id: string
@@ -247,7 +247,7 @@ export default function HomePage() {
                   <div className="h-48 bg-gradient-to-br from-primary-900 to-night-900 flex items-center justify-center">
                     {lesson.imageUrl ? (
                       <img
-                        src={lesson.imageUrl}
+                        src={getMediaUrl(lesson.imageUrl)}
                         alt={lesson.title}
                         className="w-full h-full object-cover"
                       />
