@@ -16,9 +16,18 @@ async function bootstrap() {
   app.use('/uploads', express.static(uploadsPath));
 
   // Configuration CORS
-  const allowedOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(',')
-    : ['http://localhost:3000'];
+  const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const origins = rawFrontendUrl.split(',').map((url) => url.trim());
+
+  // Autoriser avec et sans slash final pour plus de robustesse
+  const allowedOrigins = [];
+  origins.forEach(url => {
+    const cleanUrl = url.replace(/\/$/, '');
+    allowedOrigins.push(cleanUrl);
+    allowedOrigins.push(`${cleanUrl}/`);
+  });
+
+  console.log('🌐 Allowed Origins:', allowedOrigins);
 
   app.enableCors({
     origin: allowedOrigins,
