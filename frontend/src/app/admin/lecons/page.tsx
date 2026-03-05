@@ -10,7 +10,7 @@ import {
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useAuthStore } from '@/store/auth'
-import { lessonsAPI, categoriesAPI } from '@/lib/api'
+import { lessonsAPI, categoriesAPI, getMediaUrl } from '@/lib/api'
 import { toast } from 'sonner'
 import ConfirmModal from '@/components/ui/ConfirmModal'
 
@@ -259,7 +259,7 @@ export default function AdminLessonsPage() {
                         <div className="flex items-center gap-4">
                           {lesson.imageUrl ? (
                             <img
-                              src={lesson.imageUrl}
+                              src={getMediaUrl(lesson.imageUrl)}
                               alt={lesson.title}
                               className="w-14 h-14 object-cover rounded-xl shadow-lg border border-white/10 group-hover:scale-105 transition-transform"
                             />

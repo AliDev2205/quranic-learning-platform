@@ -9,7 +9,7 @@ import {
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { useAuthStore } from '@/store/auth'
-import { lessonsAPI, categoriesAPI } from '@/lib/api'
+import { lessonsAPI, categoriesAPI, getMediaUrl } from '@/lib/api'
 import { toast } from 'sonner'
 
 export default function ModifierLessonPage() {
@@ -387,7 +387,7 @@ export default function ModifierLessonPage() {
 
                 {currentMedia.imageUrl && !previews.image && (
                   <div className="relative group/img overflow-hidden rounded-xl h-64 shadow-2xl mb-4">
-                    <img src={currentMedia.imageUrl} alt="Actuelle" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
+                    <img src={getMediaUrl(currentMedia.imageUrl)} alt="Actuelle" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
                       <button
                         type="button"
